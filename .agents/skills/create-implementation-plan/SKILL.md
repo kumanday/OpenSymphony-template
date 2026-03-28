@@ -1,3 +1,12 @@
+---
+name: create-implementation-plan
+description: |
+  Generate a structured implementation plan from project requirements with
+  decomposed tasks, milestones, dependencies, and acceptance criteria.
+  Use when starting a new project to create docs/tasks/*.md files suitable
+  for conversion to Linear issues.
+---
+
 # Create Implementation Plan Skill
 
 ## Purpose
