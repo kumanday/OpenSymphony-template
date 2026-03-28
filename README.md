@@ -33,8 +33,24 @@ after_create: |
 
 ### 4. Set Up GitHub
 
-1. Ensure your repository has the `symphony` label (create it if needed)
+1. Create the required labels:
+   - `symphony` - Applied to all PRs created by OpenSymphony
+   - `review-this` - Triggers automated AI PR review
+   
+   Go to **Issues → Labels → New label** for each.
+
 2. Set `GITHUB_TOKEN` environment variable with repo access
+
+3. Configure repository secrets for AI PR Review (**Settings → Secrets and variables → Actions**):
+
+   | Secret | Required | Description |
+   |--------|----------|-------------|
+   | `LLM_API_KEY` | Yes | API key for your LLM provider |
+   | `GITHUB_TOKEN` | Auto | Provided automatically by GitHub Actions |
+
+   > **Note**: For repositories that need to post review comments from a bot account, use `ALLHANDS_BOT_GITHUB_PAT` instead of the default `GITHUB_TOKEN`.
+
+   See [OpenHands PR Review Plugin](https://github.com/OpenHands/extensions/tree/main/plugins/pr-review) for full documentation.
 
 ### 5. Generate Implementation Plan
 
