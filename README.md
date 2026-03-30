@@ -25,13 +25,31 @@ after_create: |
   git clone --depth 1 https://github.com/YOUR-ORG/YOUR-REPO.git .
 ```
 
-### 3. Set Up Linear
+### 3. Configure `config.yaml`
+
+The template includes a root-level `config.yaml` that `opensymphony run` reads by default.
+
+Update it for your machine and deployment mode:
+
+```yaml
+control_plane:
+  bind: 127.0.0.1:2468
+
+openhands:
+  tool_dir: ../../tools/openhands-server
+```
+
+- Keep the control-plane port on `2468` unless you have a reason to change it
+- If you run against an external OpenHands agent-server, you can omit `openhands.tool_dir`
+- Adjust relative paths so they resolve correctly from your target repo root
+
+### 4. Set Up Linear
 
 1. Create a Linear project for your repository
 2. Note the project slug from the project URL (e.g., `my-project-abc123`)
 3. Set `LINEAR_API_KEY` environment variable
 
-### 4. Set Up GitHub
+### 5. Set Up GitHub
 
 1. Create the required labels:
    - `symphony` - Applied to all PRs created by OpenSymphony
@@ -52,7 +70,7 @@ after_create: |
 
    See [OpenHands PR Review Plugin](https://github.com/OpenHands/extensions/tree/main/plugins/pr-review) for full documentation.
 
-### 5. Generate Implementation Plan
+### 6. Generate Implementation Plan
 
 Create a detailed implementation plan with structured tasks:
 
@@ -69,13 +87,13 @@ Or manually create `docs/tasks/` with one markdown file per task containing:
 - Test Plan
 - Dependencies (blockedBy, blocks, parent)
 
-### 6. Convert Tasks to Linear Issues
+### 7. Convert Tasks to Linear Issues
 
 ```bash
 opensymphony convert-tasks --project your-project-slug
 ```
 
-### 7. Run OpenSymphony
+### 8. Run OpenSymphony
 
 ```bash
 # Run the orchestrator
@@ -107,6 +125,7 @@ opensymphony run --issue YOUR-ISSUE-ID
 │   └── tasks/                # Implementation task files
 ├── AGENTS.md                 # Agent context and conventions
 ├── WORKFLOW.md               # Orchestration configuration
+├── config.yaml               # Runtime config for `opensymphony run`
 └── README.md                 # This file
 ```
 
@@ -115,7 +134,7 @@ opensymphony run --issue YOUR-ISSUE-ID
 1. **Brainstorm** - Design your project with LLM assistance (future tooling)
 2. **Plan** - Generate PRD, architecture, and implementation plan
 3. **Convert** - Transform tasks into Linear issues with dependencies
-4. **Configure** - Update WORKFLOW.md with project details
+4. **Configure** - Update `WORKFLOW.md` and `config.yaml` with project details
 5. **Execute** - Run OpenSymphony to implement issues autonomously
 
 ## Key Files to Customize
@@ -127,6 +146,13 @@ The main orchestration configuration. Key sections:
 - `tracker.project_slug` - Your Linear project
 - `hooks.after_create` - How to clone your repo
 - `openhands.agent.llm.model` - LLM model selection
+
+### config.yaml
+
+Runtime config for `opensymphony run`.
+
+- `control_plane.bind` - Local control-plane HTTP/SSE address for the TUI
+- `openhands.tool_dir` - Path to the local OpenHands agent-server checkout when running in supervised local mode
 
 ### AGENTS.md
 
