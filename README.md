@@ -74,10 +74,12 @@ openhands:
 
 Create a detailed implementation plan with structured tasks:
 
-```bash
-# Use the create-implementation-plan skill
-opensymphony plan --skill create-implementation-plan
-```
+Use the repo's `create-implementation-plan` skill with your coding agent to
+generate the initial planning docs and `docs/tasks/*.md` files. The skill
+definition lives at `.agents/skills/create-implementation-plan/SKILL.md`.
+
+OpenSymphony does not currently provide a built-in `opensymphony plan`
+subcommand.
 
 Or manually create `docs/tasks/` with one markdown file per task containing:
 - Summary
@@ -89,18 +91,25 @@ Or manually create `docs/tasks/` with one markdown file per task containing:
 
 ### 7. Convert Tasks to Linear Issues
 
-```bash
-opensymphony convert-tasks --project your-project-slug
-```
+Use the repo's `convert-tasks-to-linear` skill with your coding agent to turn
+`docs/tasks/` into Linear parent issues, sub-issues, and blocker
+relationships. The skill definition lives at
+`.agents/skills/convert-tasks-to-linear/SKILL.md`.
+
+OpenSymphony does not currently provide a built-in
+`opensymphony convert-tasks` subcommand.
 
 ### 8. Run OpenSymphony
 
 ```bash
-# Run the orchestrator
+# From the target repo root, run the orchestrator
 opensymphony run
 
-# Or with a specific issue
-opensymphony run --issue YOUR-ISSUE-ID
+# Or point at an explicit runtime config
+opensymphony run --config ./config.yaml
+
+# Reattach to a managed issue conversation for debugging
+opensymphony debug YOUR-ISSUE-ID
 ```
 
 ## Directory Structure
@@ -132,8 +141,8 @@ opensymphony run --issue YOUR-ISSUE-ID
 ## Workflow Process
 
 1. **Brainstorm** - Design your project with LLM assistance (future tooling)
-2. **Plan** - Generate PRD, architecture, and implementation plan
-3. **Convert** - Transform tasks into Linear issues with dependencies
+2. **Plan** - Use the `create-implementation-plan` skill, or write the docs/tasks manually
+3. **Convert** - Use the `convert-tasks-to-linear` skill, or create the Linear issues manually
 4. **Configure** - Update `WORKFLOW.md` and `config.yaml` with project details
 5. **Execute** - Run OpenSymphony to implement issues autonomously
 
@@ -145,7 +154,7 @@ The main orchestration configuration. Key sections:
 
 - `tracker.project_slug` - Your Linear project
 - `hooks.after_create` - How to clone your repo
-- `openhands.agent.llm.model` - LLM model selection
+- `openhands.conversation.agent.llm.model` - LLM model selection
 
 ### config.yaml
 
@@ -162,6 +171,12 @@ Project-specific context for agents. Include:
 - Architecture decisions
 - Testing requirements
 - File organization
+
+### .agents/skills/
+
+Repo-owned operational instructions for the coding agent. These are not
+OpenSymphony CLI subcommands. Review and customize them for your project,
+especially any validation commands, PR-body checks, or workflow assumptions.
 
 ### docs/tasks/
 
@@ -199,6 +214,9 @@ Brief description
 
 ## Skills
 
+These skills are intended to be used by the coding agent working in the target
+repo. They are not commands implemented by the `opensymphony` CLI.
+
 | Skill | Purpose |
 |-------|---------|
 | `create-implementation-plan` | Generate structured task breakdown |
@@ -213,7 +231,7 @@ Brief description
 
 - OpenSymphony CLI installed
 - Linear API key
-- GitHub personal access token
+- GitHub authentication available to `gh` CLI
 - OpenHands agent-server running locally or remotely
 - LLM API key (model specified in WORKFLOW.md)
 

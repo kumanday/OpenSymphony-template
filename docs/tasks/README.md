@@ -47,5 +47,5 @@ Use `NNN-brief-description.md` format:
 ## Next Steps
 
 1. Create task files in this directory
-2. Run `opensymphony convert-tasks --project your-project-slug`
+2. Use the repo's `convert-tasks-to-linear` skill to create the corresponding Linear issues, or create them manually from these task files
 3. Verify issues appear in Linear
