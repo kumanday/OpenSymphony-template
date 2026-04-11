@@ -71,13 +71,6 @@ openhands:
         # Provider-specific auth/base-url overrides and extra LLM option keys are
         # rejected until the current conversation-create adapter can forward them.
         model: ${LLM_MODEL}
-
-  mcp:
-    stdio_servers:
-      - name: linear
-        command:
-          - opensymphony
-          - linear-mcp
 ---
 
 You are working on a Linear ticket `{{ issue.identifier }}`
@@ -113,9 +106,12 @@ Instructions:
 
 Work only in the provided repository copy. Do not touch any other path.
 
-## Prerequisite: Linear MCP or `linear_graphql` tool is available
+## Prerequisite: `LINEAR_API_KEY` is available
 
-The agent should be able to talk to Linear, either via a configured Linear MCP server or injected `linear_graphql` tool. If none are present, stop and ask the user to configure Linear.
+The agent must be able to talk to Linear through direct GraphQL using
+`LINEAR_API_KEY` plus the repo-local `linear` skill assets. If the key is not
+present, treat that as a real blocker and follow the blocked path in this
+workflow.
 
 ## Default posture
 
@@ -266,7 +262,7 @@ Use this only when completion is blocked by missing required tools or missing au
     - Document these temporary proof steps and outcomes in the workpad `Validation`/`Notes` sections so reviewers can follow the evidence.
 6.  Re-check all acceptance criteria and close any gaps.
 7.  Before every `git push` attempt, run the required validation for your scope and confirm it passes; if it fails, address issues and rerun until green, then commit and push changes.
-8.  Attach PR URL to the Linear issue as a link resource using `linear_save_issue(links=[{url, title}])`. This is REQUIRED - do not rely on mentioning the PR URL in comments alone. The PR must appear in the issue's Links/Attachments section.
+8.  Attach the PR URL to the Linear issue through the repo-local `linear` skill using `attachmentLinkGitHubPR` (preferred) or `attachmentLinkURL` when the target is not a GitHub PR. This is REQUIRED - do not rely on mentioning the PR URL in comments alone. The PR must appear in the issue's Links/Attachments section.
     - Ensure the GitHub PR has label `symphony` (add it if missing).
     - Add the `review-this` label to trigger automated AI PR review.
 9.  Merge latest `origin/main` into branch, resolve conflicts, and rerun checks.
@@ -383,7 +379,7 @@ For major rework:
 - If issue state is `Backlog`, do not modify it; wait for human to move it to `Todo`.
 - Do not edit the issue body/description for planning or progress tracking.
 - Use exactly one persistent workpad comment (`## Agent Harness Workpad`) per issue.
-- If comment editing is unavailable in-session, use the update script. Only report blocked if both MCP editing and script-based editing are unavailable.
+- If comment editing fails, use the repo-local `linear` helper with `queries/comment_update.graphql` before reporting a blocker.
 - Temporary proof edits are allowed only for local verification and must be reverted before commit.
 - If out-of-scope improvements are found, create a separate Backlog issue rather
   than expanding current scope, and include a clear
@@ -413,7 +409,8 @@ Update the priority table in the Linear project overview whenever:
 
 ### How to update the dashboard
 
-1. Use the `linear_get_project` tool to fetch the current project description
+1. Use the repo-local Linear helper with `queries/project_by_slug.graphql` to
+   fetch the current project description
 2. Locate the `## Dependency Blockers & PR Review Priority` section
    - If it does not exist, create it at the very top of the project description.
    - If the top of the description contains a stale narrative overview or milestone dump, replace that top section with the live dashboard and keep any still-useful static planning notes below it.
@@ -426,7 +423,9 @@ Update the priority table in the Linear project overview whenever:
    - **P1 (🟡 Epic):** Parent issues of active milestones that need review
    - **P2 (🟢 Ready):** Issues unblocked but with lower downstream impact
    - **P3 (⚪ Waiting):** Issues currently blocked by dependencies
-5. Use `linear_save_project` to update the description with the new table
+5. Use the repo-local Linear helper with
+   `queries/project_update_content.graphql` to update the description with the
+   new table
 6. Do not append ad hoc prose summaries above the dashboard. Keep the dashboard concise, current, and reviewer-focused.
 
 ### Priority calculation guidelines

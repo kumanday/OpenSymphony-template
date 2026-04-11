@@ -239,11 +239,14 @@ repo. They are not commands implemented by the `opensymphony` CLI.
 
 ### Agent can't find Linear tools
 
-Ensure `opensymphony linear-mcp` is available or configure MCP stdio server in WORKFLOW.md.
+Ensure `LINEAR_API_KEY` is exported and the repo-local `linear` skill files
+are present under `.agents/skills/linear/`.
 
 ### PR not linked to Linear issue
 
-The agent uses `linear_save_issue(links=[...])` to attach PRs. Check that the Linear MCP has write permissions.
+The agent should use the repo-local `linear` skill with
+`queries/attachment_link_github_pr.graphql` or
+`queries/attachment_link_url.graphql` to attach the PR in Linear.
 
 ### Workpad comment not updating
 
