@@ -89,7 +89,7 @@ echo "  - CI: green"
 echo "  - Conflicts: resolved"
 echo "  - Review: addressed"
 echo ""
-echo "Move the Linear issue to 'Human Review' state via Linear MCP tools."
+echo "Move the Linear issue to 'Human Review' state via the repo-local Linear GraphQL helper."
 echo "**DO NOT MERGE** - the user reviews and merges."
 ```
 
