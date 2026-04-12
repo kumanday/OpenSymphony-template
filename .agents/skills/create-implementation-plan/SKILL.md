@@ -20,9 +20,9 @@ Use this skill when starting a new project after:
 2. Having a rough PRD or product vision
 3. Ready to decompose work into actionable tasks
 
-## Input Required
+## Required Inputs
 
-Before running this skill, gather:
+Before generating files, gather or infer:
 - Project name and description
 - Key requirements and features
 - Technical constraints and preferences
@@ -162,9 +162,9 @@ Check that:
 - No duplicate tasks
 - Coverage of all requirements
 
-## Output Files
+## Expected Output
 
-After running this skill:
+After completing this skill, the repository should contain:
 
 ```
 docs/
@@ -179,9 +179,9 @@ docs/
     └── ...                  # One file per task
 ```
 
-## Example Prompt
+## Optional Prompt Template
 
-When using this skill with an LLM:
+If the user asks for a reusable planning prompt, adapt this template:
 
 ```
 PROJECT: [Your Project Name] - [Brief Description]
@@ -199,9 +199,9 @@ All of this will be used to convert the tasks to Linear issues and then implemen
 
 ## Next Steps
 
-After creating the implementation plan:
+After generating the implementation plan, suggest these next steps to the user:
 
 1. Review the generated tasks for accuracy
-2. Run `opensymphony convert-tasks --project your-project-slug`
-3. Verify issues in Linear
+2. Use the repo's `convert-tasks-to-linear` skill to create the Linear issues, or create them manually
+3. Verify hierarchy, blockers, and project placement in Linear
 4. Begin execution with `opensymphony run`
