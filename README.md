@@ -96,8 +96,9 @@ Use the repo's `convert-tasks-to-linear` skill with your coding agent to turn
 relationships. The skill definition lives at
 `.agents/skills/convert-tasks-to-linear/SKILL.md`.
 
-OpenSymphony does not currently provide a built-in
-`opensymphony convert-tasks` subcommand.
+OpenSymphony does not currently provide a built-in task-conversion CLI
+subcommand; use the `convert-tasks-to-linear` skill or create the issues
+manually.
 
 ### 8. Run OpenSymphony
 

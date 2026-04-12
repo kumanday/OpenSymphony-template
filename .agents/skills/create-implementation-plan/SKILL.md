@@ -11,7 +11,7 @@ description: |
 
 ## Purpose
 
-Generate a structured implementation plan from project requirements, suitable for conversion to Linear issues and autonomous execution.
+Generate a structured implementation package from project requirements, including persistent project context and implementation tasks that are suitable for conversion to Linear issues and autonomous execution.
 
 ## When to Use
 
@@ -20,13 +20,14 @@ Use this skill when starting a new project after:
 2. Having a rough PRD or product vision
 3. Ready to decompose work into actionable tasks
 
-## Input Required
+## Required Inputs
 
-Before running this skill, gather:
+Before generating files, gather or infer:
 - Project name and description
 - Key requirements and features
 - Technical constraints and preferences
 - Any existing design documents or PRDs
+- User-provided links, attached findings, or earlier planning notes
 
 ## Process
 
@@ -37,10 +38,32 @@ Collect all relevant context:
 - Requirements from stakeholders
 - Technical research findings
 - Reference implementations or specs
+- User-provided links, attachments, and findings
 
-### Step 2: Generate Architecture Documentation
+Synthesize the provided source material first, then do targeted supplemental research only where it materially improves the implementation plan.
+
+Capture the cross-cutting context that later coding agents will need without relying on hidden chat history.
+
+### Step 2: Generate Shared Context and Architecture Documentation
 
 Create the following files:
+
+**AGENTS.md** - Persistent implementation context for coding agents:
+- Project mission and scope
+- Non-negotiable constraints and architectural invariants
+- Cross-cutting concerns and definitions
+- Key commands, environment expectations, and repo conventions
+- References to deeper docs when needed
+
+If `AGENTS.md` already exists, refine it instead of replacing useful project-specific guidance.
+
+**README.md** - Human-facing project overview:
+- Problem statement and goals
+- Setup and primary workflows
+- High-level architecture summary
+- Pointers to detailed docs and task plans
+
+If `README.md` already exists, update it so it remains consistent with the generated plan.
 
 **docs/architecture.md** - System architecture:
 - High-level architecture diagram (text-based)
@@ -103,6 +126,19 @@ One or two sentence description of what this task accomplishes.
 - Test command or verification step 1
 - Test command or verification step 2
 
+## Context
+
+- Relevant repo paths to inspect or modify
+- Docs or specs to read before implementation
+- External links, findings, or decisions that constrain the work
+- Parent task, blockers, or sibling work that matter
+
+## Definition of Ready
+
+- [ ] Hidden assumptions from prior discussion are written down
+- [ ] Required files, docs, and dependencies are explicitly referenced
+- [ ] A coding agent could begin execution without additional planning context
+
 ## Notes
 
 Any additional context, references, or gotchas.
@@ -161,12 +197,16 @@ Check that:
 - Dependencies are correctly specified
 - No duplicate tasks
 - Coverage of all requirements
+- Shared context files cover the cross-cutting guidance needed across tasks
+- Each task includes enough repo and documentation context to meet Definition of Ready for an independent coding agent
 
-## Output Files
+## Expected Output
 
-After running this skill:
+After completing this skill, the repository should contain:
 
 ```
+AGENTS.md                    # Persistent agent context
+README.md                    # Human-facing project overview
 docs/
 ├── architecture.md          # System architecture
 ├── decisions/               # ADRs
@@ -179,29 +219,11 @@ docs/
     └── ...                  # One file per task
 ```
 
-## Example Prompt
-
-When using this skill with an LLM:
-
-```
-PROJECT: [Your Project Name] - [Brief Description]
-
-Based on the links I've provided, the attached findings, and your additional research, explore and design the best way for me to proceed with implementing this project.
-
-Create a detailed comprehensive spec that I can pass along to coding agents to implement the [Project Name] project.
-
-Output as several downloadable markdown files. Some files will be universal/persistent context across the implementation of all components, including things like cross-cutting concerns and architectural guidance. Target some of this for an AGENTS.md that can be injected as persistent context. Other parts of this can be in a README.md and possibly some more specific documentation files that can be referenced from README.md and AGENTS.md and stored separately in a docs/ directory.
-
-The other necessary file is an implementation plan in the form of scoped and decomposed tasks. These should have a structured schema that can be easily converted into Linear issues, with relevant hierarchy (parent issues and sub-issues), dependencies, milestones, descriptions, acceptance criteria, test plan, and any other relevant metadata. Note that Linear doesn't use Epics, but we can track hierarchy/encapsulation via parent issue/sub-issue, and sequential phases of development via milestones.
-
-All of this will be used to convert the tasks to Linear issues and then implemented via OpenSymphony where each issue is taken by a subagent with independent context. This requires referencing project-wide context within Linear as well as the code repository where relevant, and having all of the relevant information in the task that would enable its implementation (akin to Agile "Definition of Ready").
-```
-
 ## Next Steps
 
-After creating the implementation plan:
+After generating the implementation package, suggest these next steps to the user:
 
 1. Review the generated tasks for accuracy
-2. Run `opensymphony convert-tasks --project your-project-slug`
-3. Verify issues in Linear
+2. Use the repo's `convert-tasks-to-linear` skill to create the Linear issues, or create them manually
+3. Verify hierarchy, blockers, and project placement in Linear
 4. Begin execution with `opensymphony run`
