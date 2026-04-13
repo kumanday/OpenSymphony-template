@@ -107,9 +107,6 @@ manually.
 # From the target repo root, run the orchestrator
 opensymphony run
 
-# Or point at an explicit runtime config
-opensymphony run --config ./config.yaml
-
 # Reattach to a managed issue conversation for debugging
 opensymphony debug YOUR-ISSUE-ID
 ```
