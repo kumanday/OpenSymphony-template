@@ -295,21 +295,25 @@ Use this only when completion is blocked by missing required tools or missing au
    - inline PR review comments (`gh api repos/<owner>/<repo>/pulls/<pr>/comments`)
    - PR review summaries/states (`gh pr view --json reviews,reviewDecision`)
    - PR check state (`gh pr view --json statusCheckRollup`)
-3. Treat all human feedback channels as authoritative, not just inline review comments:
+3. Poll silently by default while the issue remains in `Human Review`.
+   - Do not add a new Linear comment.
+   - Do not rewrite the workpad comment just because a poll happened, the retry counter increased, or the PR is still waiting on the same human decision.
+   - Only update the single workpad comment when something materially changes: new actionable feedback arrives, approval/review/check/mergeability state changes, the ticket leaves `Human Review`, or you need a one-time escalation after an unusually long stall.
+4. Treat all human feedback channels as authoritative, not just inline review comments:
    - a new Linear issue comment from the operator is actionable feedback
    - a new top-level PR comment is actionable feedback
    - a failing required PR check is actionable feedback even if no human comment was left
-4. If any actionable feedback or failing required check is present, move the issue to `Rework` and follow the rework flow.
+5. If any actionable feedback or failing required check is present, move the issue to `Rework` and follow the rework flow.
    - Do not wait for an inline review comment when a Linear comment, top-level PR comment, or failing check already requires action.
-4. If approved, human moves the issue to `Merging`.
-5. When the issue is in `Merging`, first inspect the attached PR state.
+6. If approved, human moves the issue to `Merging`.
+7. When the issue is in `Merging`, first inspect the attached PR state.
    - If the PR is already `MERGED`, update the workpad/dashboard and move the issue directly to `Done`.
    - If the PR is still open, re-run the PR feedback sweep protocol one final time. Do not proceed if:
    - Any critical/major feedback remains unaddressed (no code change or pushback reply)
    - Required checks are failing
    - Required validation items from the ticket are incomplete
    Wait for the human to move the issue to `Merging` only when genuinely ready.
-6. If the PR is still open, open and follow `.agents/skills/land/SKILL.md` to perform the repo-specific final merge-readiness checks and handoff. Do not call `gh pr merge` directly.
+8. If the PR is still open, open and follow `.agents/skills/land/SKILL.md` to perform the repo-specific final merge-readiness checks and handoff. Do not call `gh pr merge` directly.
 7. Continue polling while the issue remains in `Merging`. As soon as the attached PR is observed in `MERGED` state, move the issue to `Done`.
 
 ## Step 4: Rework handling
