@@ -36,12 +36,13 @@ control_plane:
   bind: 127.0.0.1:2468
 
 openhands:
-  tool_dir: ../../tools/openhands-server
+  tool_dir: ~/.opensymphony/openhands-server
 ```
 
 - Keep the control-plane port on `2468` unless you have a reason to change it
+- For managed local OpenHands, run `opensymphony install openhands` once before `opensymphony run`
 - If you run against an external OpenHands agent-server, you can omit `openhands.tool_dir`
-- Adjust relative paths so they resolve correctly from your target repo root
+- The default path above is the app-owned install location that the published CLI manages
 
 ### 4. Set Up Linear
 
@@ -162,7 +163,7 @@ The main orchestration configuration. Key sections:
 Runtime config for `opensymphony run`.
 
 - `control_plane.bind` - Local control-plane HTTP/SSE address for the TUI
-- `openhands.tool_dir` - Path to the local OpenHands agent-server checkout when running in supervised local mode
+- `openhands.tool_dir` - Path to the managed local OpenHands install when running in supervised local mode
 
 ### AGENTS.md
 
