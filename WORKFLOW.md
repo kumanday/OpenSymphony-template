@@ -314,7 +314,7 @@ Use this only when completion is blocked by missing required tools or missing au
    - Required validation items from the ticket are incomplete
    Wait for the human to move the issue to `Merging` only when genuinely ready.
 8. If the PR is still open, open and follow `.agents/skills/land/SKILL.md` to perform the repo-specific final merge-readiness checks and handoff. Do not call `gh pr merge` directly.
-7. Continue polling while the issue remains in `Merging`. As soon as the attached PR is observed in `MERGED` state, move the issue to `Done`.
+9. Continue polling while the issue remains in `Merging`. As soon as the attached PR is observed in `MERGED` state, move the issue to `Done`.
 
 ## Step 4: Rework handling
 
