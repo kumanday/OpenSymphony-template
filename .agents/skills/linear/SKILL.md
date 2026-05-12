@@ -83,6 +83,11 @@ python3 .agents/skills/linear/scripts/linear_graphql.py \
   - `.agents/skills/linear/queries/attachment_link_url.graphql`
 - Create an issue relation:
   - `.agents/skills/linear/queries/issue_relation_create.graphql`
+- Read project planning state:
+  - `.agents/skills/linear/queries/project_planning_state.graphql`
+- Create or update a project milestone:
+  - `.agents/skills/linear/queries/project_milestone_create.graphql`
+  - `.agents/skills/linear/queries/project_milestone_update.graphql`
 - Update project overview/content:
   - `.agents/skills/linear/queries/project_by_slug.graphql`
   - `.agents/skills/linear/queries/project_update_content.graphql`
