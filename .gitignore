@@ -26,9 +26,14 @@ Thumbs.db
 *.pem
 *.key
 
-# OpenSymphony
-.opensymphony/
-
 # Logs
 *.log
 logs/
+
+# OpenSymphony
+.opensymphony*
+!.opensymphony/
+.opensymphony/*
+!.opensymphony/memory/
+.opensymphony/memory/*
+!.opensymphony/memory/memory.yaml
