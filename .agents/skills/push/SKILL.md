@@ -26,7 +26,15 @@ description:
 ## Steps
 
 1. Identify current branch and confirm remote state.
-2. Run local validation (`make -C elixir all`) before pushing.
+2. Run validation that matches the target repository before pushing:
+   - First inspect repo instructions (`AGENTS.md`, `README`, package scripts,
+     Makefile, CI config) and the changed files.
+   - Prefer the repo's documented fast validation command when one exists.
+   - Otherwise choose the smallest relevant checks for the diff, such as
+     formatting/lint/type-check/test commands for touched languages.
+   - Always run a whitespace/conflict-marker check such as `git diff --check`.
+   - If no runnable validation is available, state that explicitly before
+     pushing.
 3. Push branch to `origin` with upstream tracking if needed, using whatever
    remote URL is already configured.
 4. If push is not clean/rejected:
@@ -52,7 +60,9 @@ description:
      scope (all intended work on the branch), not just the newest commits,
      including newly added work, removed work, or changed approach.
    - Do not reuse stale description text from earlier iterations.
-7. Validate PR body with `mix pr_body.check` and fix all reported issues.
+7. If the target repo has a PR body checker, run it and fix all reported issues.
+   Otherwise, manually ensure the PR body has no placeholders and matches the
+   current diff.
 8. Reply with the PR URL from `gh pr view`.
 
 ## Commands
@@ -61,8 +71,15 @@ description:
 # Identify branch
 branch=$(git branch --show-current)
 
-# Minimal validation gate
-make -C elixir all
+# Minimal validation gate. Add the repo's documented checks for your diff.
+git diff --check
+
+# Examples only; run the ones that apply to the target repo:
+# npm test
+# cargo test
+# pytest
+# go test ./...
+# make test
 
 # Initial push: respect the current origin remote.
 git push -u origin HEAD
@@ -101,7 +118,11 @@ fi
 
 tmp_pr_body=$(mktemp)
 gh pr view --json body -q .body > "$tmp_pr_body"
-(cd elixir && mix pr_body.check --file "$tmp_pr_body")
+if [ -x scripts/check-pr-body ]; then
+  scripts/check-pr-body "$tmp_pr_body"
+else
+  ! rg -n "<!--|TODO|TBD" "$tmp_pr_body"
+fi
 rm -f "$tmp_pr_body"
 
 # Show PR URL for the reply
