@@ -100,6 +100,19 @@ Before submitting a PR:
 4. New code has tests
 5. Documentation updated if needed
 
+## Review guidelines
+
+Automated PR reviews (OpenHands PR Review plugin or Codex code review — see
+`Active review provider` in `WORKFLOW.md`) apply this section, together with
+the full guide in `.agents/skills/custom-codereview-guide.md` when present.
+Keep both current.
+
+- Flag correctness bugs, regressions, security risks, and missing tests first;
+  skip style-only feedback that formatters and linters already enforce.
+- Treat behavior changes without test or reproduction evidence as incomplete.
+- <!-- Add repository-specific review rules here: security-sensitive paths,
+  architecture invariants, required validation commands. -->
+
 ## Architecture Decisions
 
 <!-- Document key architecture decisions -->

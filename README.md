@@ -52,24 +52,49 @@ openhands:
 
 ### 5. Set Up GitHub
 
-1. Create the required labels:
-   - `symphony` - Applied to all PRs created by OpenSymphony
-   - `review-this` - Triggers automated AI PR review
-   
-   Go to **Issues → Labels → New label** for each.
+1. Create the `symphony` label (applied to all PRs created by OpenSymphony).
+   Go to **Issues → Labels → New label**.
 
 2. Set `GITHUB_TOKEN` environment variable with repo access
 
-3. Configure repository secrets for AI PR Review (**Settings → Secrets and variables → Actions**):
+3. Choose an automated PR review provider and record it under
+   `Automated AI PR review` in `WORKFLOW.md` (`opensymphony init` does this
+   for you):
 
-   | Secret | Required | Description |
-   |--------|----------|-------------|
-   | `LLM_API_KEY` | Yes | API key for your LLM provider |
-   | `GITHUB_TOKEN` | Auto | Provided automatically by GitHub Actions |
+   **Option A — Codex code review** (included with a ChatGPT subscription;
+   GitHub-triggered reviews draw from a separate code-review usage pool, so
+   they never compete with implementation runs for quota):
 
-   > **Note**: For repositories that need to post review comments from a bot account, use `ALLHANDS_BOT_GITHUB_PAT` instead of the default `GITHUB_TOKEN`.
+   1. Sign in at https://chatgpt.com/codex with the ChatGPT account that
+      should fund reviews. If your GitHub identity is linked to more than one
+      ChatGPT account (personal + workspace), connect from the intended
+      account last — the most recently connected account wins.
+   2. In Codex settings, install the Codex GitHub app for this repository.
+   3. Enable **Code review** for the repository and turn on **Automatic
+      reviews** so every newly opened PR gets an initial review.
+   4. No GitHub Actions workflow, secret, or `review-this` label is needed.
+      Agents request re-review after each follow-up push by commenting
+      exactly `@codex review`.
 
-   See [OpenHands PR Review Plugin](https://github.com/OpenHands/extensions/tree/main/plugins/pr-review) for full documentation.
+   **Option B — OpenHands PR Review plugin** (pay-per-token with your own
+   LLM API key):
+
+   1. Create the `review-this` label (triggers AI PR review re-runs).
+   2. Keep `.github/workflows/ai-pr-review.yml` and configure repository
+      secrets/variables (**Settings → Secrets and variables → Actions**):
+
+      | Secret | Required | Description |
+      |--------|----------|-------------|
+      | `AI_REVIEW_API_KEY` | Yes | API key for your review LLM provider |
+      | `GITHUB_TOKEN` | Auto | Provided automatically by GitHub Actions |
+
+      > **Note**: For repositories that need to post review comments from a bot account, use `ALLHANDS_BOT_GITHUB_PAT` instead of the default `GITHUB_TOKEN`.
+
+      See [OpenHands PR Review Plugin](https://github.com/OpenHands/extensions/tree/main/plugins/pr-review) for full documentation.
+
+   With either provider, the review loop is iterative by design: the initial
+   review runs when the PR opens, and agents re-trigger a fresh review after
+   every follow-up push until no actionable findings remain.
 
 ### 6. Generate Implementation Plan
 
@@ -235,8 +260,10 @@ repo. They are not commands implemented by the `opensymphony` CLI.
 - OpenSymphony CLI installed
 - Linear API key
 - GitHub authentication available to `gh` CLI
-- OpenHands agent-server running locally or remotely
-- LLM API key (model specified in WORKFLOW.md)
+- OpenHands agent-server running locally or remotely, or the Codex harness
+  with a ChatGPT subscription
+- LLM API key (model specified in WORKFLOW.md), or a ChatGPT subscription when
+  using the Codex harness and Codex code review
 
 ## Troubleshooting
 
