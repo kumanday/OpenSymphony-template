@@ -70,8 +70,8 @@ openhands:
       ChatGPT account (personal + workspace), connect from the intended
       account last — the most recently connected account wins.
    2. In Codex settings, install the Codex GitHub app for this repository.
-   3. Create a **Codex cloud environment** for the repository (Codex
-      settings → **Environments** → **Create environment**). Until one
+   3. Create a **Codex cloud environment** for the repository at
+      https://chatgpt.com/codex/cloud/settings/environments. Until one
       exists, Codex only replies "To use Codex here, create an environment
       for this repo" instead of reviewing. Defaults are fine for review-only
       use; no setup script needed.
