@@ -70,9 +70,14 @@ openhands:
       ChatGPT account (personal + workspace), connect from the intended
       account last — the most recently connected account wins.
    2. In Codex settings, install the Codex GitHub app for this repository.
-   3. Enable **Code review** for the repository and turn on **Automatic
+   3. Create a **Codex cloud environment** for the repository (Codex
+      settings → **Environments** → **Create environment**). Until one
+      exists, Codex only replies "To use Codex here, create an environment
+      for this repo" instead of reviewing. Defaults are fine for review-only
+      use; no setup script needed.
+   4. Enable **Code review** for the repository and turn on **Automatic
       reviews** so every newly opened PR gets an initial review.
-   4. No GitHub Actions workflow, secret, or `review-this` label is needed.
+   5. No GitHub Actions workflow, secret, or `review-this` label is needed.
       Agents request re-review after each follow-up push by commenting
       exactly `@codex review`.
 
