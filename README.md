@@ -97,10 +97,10 @@ openhands:
 
       See [OpenHands PR Review Plugin](https://github.com/OpenHands/extensions/tree/main/plugins/pr-review) for full documentation.
 
-   With either provider, every PR receives exactly three full scans: one
-   automatic scan when the PR opens and two explicit re-triggers. Findings are
-   batched between scans. Fixes made after scan 3 receive exact-commit local
-   review instead of starting a fourth full scan.
+   With either provider, every PR receives exactly eight full scans: one
+   automatic scan when the PR opens and seven explicit re-triggers. Findings are
+   batched between scans. Fixes made after scan 8 receive exact-commit local
+   review instead of starting a ninth full scan.
 
 ### 6. Generate Implementation Plan
 

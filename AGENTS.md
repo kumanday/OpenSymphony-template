@@ -110,9 +110,9 @@ Keep both current.
 - Flag correctness bugs, regressions, security risks, and missing tests first;
   skip style-only feedback that formatters and linters already enforce.
 - Treat behavior changes without test or reproduction evidence as incomplete.
-- When automated review is enabled, require exactly three completed full-PR
-  scans per PR. Batch remediation between scans; after scan 3, use exact-commit
-  local review for later fixes instead of requesting a fourth scan.
+- When automated review is enabled, require exactly eight completed full-PR
+  scans per PR. Batch remediation between scans; after scan 8, use exact-commit
+  local review for later fixes instead of requesting a ninth scan.
 - <!-- Add repository-specific review rules here: security-sensitive paths,
   architecture invariants, required validation commands. -->
 
