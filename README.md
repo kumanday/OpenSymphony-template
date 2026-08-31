@@ -78,8 +78,8 @@ openhands:
    4. Enable **Code review** for the repository and turn on **Automatic
       reviews** so every newly opened PR gets an initial review.
    5. No GitHub Actions workflow, secret, or `review-this` label is needed.
-      Agents request re-review after each follow-up push by commenting
-      exactly `@codex review`.
+      After the automatic first scan, agents request exactly two more full
+      scans by commenting exactly `@codex review`.
 
    **Option B — OpenHands PR Review plugin** (pay-per-token with your own
    LLM API key):
@@ -97,9 +97,10 @@ openhands:
 
       See [OpenHands PR Review Plugin](https://github.com/OpenHands/extensions/tree/main/plugins/pr-review) for full documentation.
 
-   With either provider, the review loop is iterative by design: the initial
-   review runs when the PR opens, and agents re-trigger a fresh review after
-   every follow-up push until no actionable findings remain.
+   With either provider, every PR receives exactly three full scans: one
+   automatic scan when the PR opens and two explicit re-triggers. Findings are
+   batched between scans. Fixes made after scan 3 receive exact-commit local
+   review instead of starting a fourth full scan.
 
 ### 6. Generate Implementation Plan
 
